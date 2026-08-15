@@ -26,7 +26,10 @@
     "algorithm-worshipping",
     "surveillance",
     "landfill-bound",
-    "conversation-killing"
+    "conversation-killing",
+    "enshitifying",
+    "billionaire-backed",
+    "unethically-made"
   ];
 
   const HOLD_MS = 2600; // how long each adjective stays on screen
@@ -54,8 +57,14 @@
     return hero.clientWidth - paddingX;
   }
 
+  // Extra room per line over the tight 1.02 line-height, so descenders
+  // (e.g. the "g" in "addicting") don't get clipped by the carousel mask.
+  const LINE_BUFFER = 1.1;
+
   function measure(text) {
     const cs = getComputedStyle(container);
+    const fontSize = parseFloat(cs.fontSize);
+    const lineHeightPx = parseFloat(cs.lineHeight);
     probe.style.fontFamily = cs.fontFamily;
     probe.style.fontSize = cs.fontSize;
     probe.style.fontWeight = cs.fontWeight;
@@ -75,7 +84,8 @@
     probe.style.overflowWrap = "break-word";
     probe.style.wordBreak = "break-word";
     probe.style.width = `${width}px`;
-    const height = probe.scrollHeight;
+    const lines = Math.max(1, Math.round(probe.scrollHeight / lineHeightPx));
+    const height = lines * fontSize * LINE_BUFFER;
 
     return { width, height };
   }
