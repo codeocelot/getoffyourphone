@@ -4,6 +4,17 @@
   --accent: #ff3b30;
   --muted: rgba(242, 240, 235, 0.35);
   --font-stack: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f2f0eb;
+    --fg: #0a0a0b;
+    --accent: #e0271c;
+    --muted: rgba(10, 10, 11, 0.35);
+    color-scheme: light;
+  }
 }
 
 * {
