@@ -75,6 +75,8 @@ body {
   overflow: hidden;
   color: var(--accent);
   vertical-align: bottom;
+  contain: layout paint;
+  will-change: width, height;
   /* width/height are animated from JS to fit the incoming word, which may
      wrap onto a second line if it's too wide to fit on one */
   transition:
@@ -86,41 +88,23 @@ body {
   display: block;
   position: relative;
   height: 100%;
+  will-change: transform;
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* Each word is sized and positioned (top, in px) from JS: the current word
+   sits at top:0, and the incoming word is placed directly beneath its
+   actual bottom edge. That keeps the two words in disjoint regions of the
+   track's local space, so a single shared transform on the track can slide
+   them both without them ever overlapping mid-animation. */
 .adjective__word {
   display: block;
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%;
-  height: 100%;
   white-space: normal;
   overflow-wrap: break-word;
   word-break: break-word;
-  will-change: transform;
-}
-
-/* Resting state: current word in view, next word parked below the fold */
-.adjective__word.is-current {
-  transform: translateY(0);
-}
-
-.adjective__word.is-next {
-  transform: translateY(110%);
-}
-
-/* Animating state: both words scroll up together */
-.adjective__track.is-animating .adjective__word.is-current {
-  transform: translateY(-110%);
-}
-
-.adjective__track.is-animating .adjective__word.is-next {
-  transform: translateY(0);
-}
-
-.adjective__track.is-animating .adjective__word {
-  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 /* Footer ----------------------------------------------------------------- */
@@ -137,7 +121,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .adjective,
-  .adjective__track.is-animating .adjective__word {
+  .adjective__track {
     transition: none;
   }
 }
